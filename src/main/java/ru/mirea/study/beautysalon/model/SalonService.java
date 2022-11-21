@@ -4,17 +4,17 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "services")
-public class Service {
+public class SalonService {
     private long id;
     private String name;
     private double price;
     private int duration;
 
-    public Service() {
+    public SalonService() {
 
     }
 
-    public Service(String name, Double price, Integer duration) {
+    public SalonService(String name, Double price, Integer duration) {
         this.name = name;
         this.price = price;
         this.duration = duration;
