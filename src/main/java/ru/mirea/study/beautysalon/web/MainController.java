@@ -1,24 +1,35 @@
 package ru.mirea.study.beautysalon.web;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.mirea.study.beautysalon.model.Appointment;
+import ru.mirea.study.beautysalon.model.CustomUserDetails;
 import ru.mirea.study.beautysalon.model.Employee;
 import ru.mirea.study.beautysalon.model.SalonService;
+import ru.mirea.study.beautysalon.service.AppointmentService;
 import ru.mirea.study.beautysalon.service.EmployeeService;
 import ru.mirea.study.beautysalon.service.ServiceService;
+import ru.mirea.study.beautysalon.service.UserService;
 
 @Controller
 public class MainController {
     private final EmployeeService employeeService;
     private final ServiceService serviceService;
+    private final AppointmentService appointmentService;
 
-    public MainController(EmployeeService employeeService, ServiceService serviceService) {
+    private final UserService userService;
+
+    public MainController(EmployeeService employeeService, ServiceService serviceService, AppointmentService appointmentService, UserService userService) {
         this.employeeService = employeeService;
         this.serviceService = serviceService;
+        this.appointmentService = appointmentService;
+        this.userService = userService;
     }
 
     @GetMapping("/employees")
@@ -71,8 +82,8 @@ public class MainController {
 
     @GetMapping("/services/new")
     public String createServiceForm(Model model) {
-        SalonService services = new SalonService();
-        model.addAttribute("service", services);
+        SalonService service = new SalonService();
+        model.addAttribute("service", service);
         return "create_service";
     }
 
@@ -114,4 +125,90 @@ public class MainController {
     public String home() {
         return "index";
     }
+
+    @GetMapping("/catalog")
+    public String catalog(Model model){
+        model.addAttribute("services", serviceService.getAllServices());
+        return "catalog";
+    }
+
+    @GetMapping("/appointments")
+    public String listAppointments(Model model) {
+        model.addAttribute("appointments", appointmentService.getAllAppointments());
+        return "appointments";
+    }
+
+//    @GetMapping("/booking")
+//    public String listBooking(Model model, @AuthenticationPrincipal Authentication authentication){
+//        String username = userService.getCurrentlyLoggedInUser(authentication);
+//        List<Appointment> appointments = appointmentService.findByUserName(username);
+//
+//        model.addAttribute("appointments", appointments);
+//        return "booking";
+//    }
+
+    @GetMapping("/appointments/new")
+    public String createAppointmentForm(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        Appointment appointment = new Appointment();
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        model.addAttribute("services", serviceService.getAllServices());
+        model.addAttribute("user", customUserDetails);
+        return "booking_form";
+    }
+
+    @PostMapping("/appointments")
+    public String saveAppointment(@ModelAttribute("appointment") Appointment appointment) {
+        appointmentService.saveAppointment(appointment);
+        return "redirect:/appointments";
+    }
+
+
+
+//    @GetMapping("/appointments")
+//    public String listAppointments(Model model) {
+//        model.addAttribute("appointments", appointmentService.getAllAppointments());
+//        return "appointments";
+//    }
+//
+//    @GetMapping("/appointments/new")
+//    public String createAppointForm(Model model) {
+//        Appointment appointment = new Appointment();
+//        model.addAttribute("appointment", appointment);
+//        return "create_appointment";
+//    }
+//
+//    @PostMapping("/appointments")
+//    public String saveAppointment(@ModelAttribute("appointment") Appointment appointment) {
+//        appointmentService.saveAppointment(appointment);
+//        return "redirect:/appointments";
+//    }
+//
+//    @GetMapping("/appointments/edit/{id}")
+//    public String editAppointForm(@PathVariable Long id, Model model) {
+//        model.addAttribute("appointment", appointmentService.getAppointmentById(id));
+//        return "edit_appointment";
+//    }
+//
+//    @PostMapping("/appointments/{id}")
+//    public String updateAppointment(@PathVariable Long id, @ModelAttribute("appointment") Appointment appointment) {
+//        Appointment existingAppointment = appointmentService.getAppointmentById(id);
+//        existingAppointment.setId(id);
+//        existingAppointment.setAppointmentDate(appointment.getAppointmentDate());
+//        existingAppointment.setAppointmentStartTime(appointment.getAppointmentStartTime());
+//        existingAppointment.setEmployeeName(appointment.getEmployeeName());
+//        existingAppointment.setStatus(appointment.getStatus());
+//        existingAppointment.setServiceName(appointment.getServiceName());
+//        appointmentService.updateAppointment(id, existingAppointment);
+//        return "redirect:/appointments";
+//    }
+//
+//    @GetMapping("/appointments/{id}")
+//    public String deleteAppointment(@PathVariable Long id) {
+//        appointmentService.deleteAppointmentById(id);
+//        return "redirect:/appointments";
+//    }
 }

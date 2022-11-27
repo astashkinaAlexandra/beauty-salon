@@ -1,14 +1,26 @@
 package ru.mirea.study.beautysalon.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "services")
 public class SalonService {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "price", nullable = false)
     private double price;
+    @Column(name = "duration", nullable = false)
     private int duration;
+
+    @OneToMany(mappedBy = "service", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Appointment> appointments;
 
     public SalonService() {
 
@@ -20,8 +32,6 @@ public class SalonService {
         this.duration = duration;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -30,7 +40,6 @@ public class SalonService {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -39,7 +48,6 @@ public class SalonService {
         this.name = name;
     }
 
-    @Column(name = "price", nullable = false)
     public Double getPrice() {
         return price;
     }
@@ -48,7 +56,6 @@ public class SalonService {
         this.price = price;
     }
 
-    @Column(name = "duration", nullable = false)
     public Integer getDuration() {
         return duration;
     }

@@ -41,7 +41,7 @@
     <h1>Registration and Login with Spring Boot, Spring Security,
         Thymeleaf, Hibernate and MySQL</h1>
     <span sec:authorize="isAuthenticated()">
-        Welcome, <strong sec:authentication="principal.username">user</strong>
+        Welcome, <strong>[[${#request.userPrincipal.principal.fullName}]]</strong>
     </span>
 </div>
 </body>

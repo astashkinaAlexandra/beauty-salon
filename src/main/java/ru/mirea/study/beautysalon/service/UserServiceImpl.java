@@ -1,12 +1,14 @@
 package ru.mirea.study.beautysalon.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.mirea.study.beautysalon.model.CustomUserDetails;
 import ru.mirea.study.beautysalon.model.Role;
 import ru.mirea.study.beautysalon.model.User;
 import ru.mirea.study.beautysalon.repository.UserRepository;
@@ -50,5 +52,22 @@ public class UserServiceImpl implements UserService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getCurrentlyLoggedInUser(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+
+        String username = "";
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof CustomUserDetails) {
+            username = ((CustomUserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return username;
     }
 }

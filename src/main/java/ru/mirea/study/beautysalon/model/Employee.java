@@ -1,14 +1,26 @@
 package ru.mirea.study.beautysalon.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
 public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "email_address", nullable = false)
     private String emailId;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Appointment> appointments;
 
     public Employee() {
 
@@ -20,8 +32,6 @@ public class Employee {
         this.emailId = emailId;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -30,7 +40,6 @@ public class Employee {
         this.id = id;
     }
 
-    @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -39,7 +48,6 @@ public class Employee {
         this.firstName = firstName;
     }
 
-    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
     }
@@ -48,7 +56,6 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    @Column(name = "email_address", nullable = false)
     public String getEmailId() {
         return emailId;
     }
