@@ -22,7 +22,6 @@ public class MainController {
     private final EmployeeService employeeService;
     private final ServiceService serviceService;
     private final AppointmentService appointmentService;
-
     private final UserService userService;
 
     public MainController(EmployeeService employeeService, ServiceService serviceService, AppointmentService appointmentService, UserService userService) {
@@ -137,6 +136,18 @@ public class MainController {
         model.addAttribute("appointments", appointmentService.getAllAppointments());
         return "appointments";
     }
+
+//    @PostMapping("/booking/new/{id}")
+//    public String saveAppointmentToList(@PathVariable("id") Long appointmentId,
+//                                        @AuthenticationPrincipal Authentication authentication) {
+//        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+//            return "You must login to book the service";
+//        }
+//
+//
+//        appointmentService.saveAppointment()
+//
+//    }
 
 //    @GetMapping("/booking")
 //    public String listBooking(Model model, @AuthenticationPrincipal Authentication authentication){

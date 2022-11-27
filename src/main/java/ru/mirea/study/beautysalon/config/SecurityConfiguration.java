@@ -11,7 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.mirea.study.beautysalon.service.CustomUserDetailsService;
+import ru.mirea.study.beautysalon.repository.UserRepository;
+import ru.mirea.study.beautysalon.service.UserServiceImpl;
 
 import javax.sql.DataSource;
 
@@ -20,11 +21,14 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private DataSource dataSource;
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        return new CustomUserDetailsService();
+    public UserDetailsService userDetailsService() {
+        return new UserServiceImpl(userRepository);
     }
 
     @Bean
@@ -53,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/css/**",
                         "/img/**").permitAll()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/v1/employees/**", "/api/v1/users/**").hasRole("ADMIN")
+                .antMatchers("/api/v1/**", "/employees/**", "/services/**", "/appointments/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
