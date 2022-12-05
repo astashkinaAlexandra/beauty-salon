@@ -1,82 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Student Management System</title>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+
+    <!-- Google font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" href="../static/css/add_form.css" th:href="@{/css/add_form.css}">
 </head>
 <body>
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#">Employee Management System</a>
-
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/employee}">Employee Management</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<br>
-<br>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-            <h1 class="text-center"> Update Employee </h1>
-            <div class="card-body">
-                <form th:action="@{/employees/{id} (id=${employee.id})}" th:object="${employee}" method="POST">
-                    <div class="form-group">
-                        <label> Employee First Name </label>
-                        <input
-                                type="text"
-                                name="firstName"
-                                th:field="*{firstName}"
-                                class="form-control"
-                                placeholder="Enter Student First Name"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label> Employee Last Name </label>
-                        <input
-                                type="text"
-                                name="lastName"
-                                th:field="*{lastName}"
-                                class="form-control"
-                                placeholder="Enter Student Last Name"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label> Employee Email </label>
-                        <input
-                                type="text"
-                                name="email"
-                                th:field="*{emailId}"
-                                class="form-control"
-                                placeholder="Enter Student Email"
-                        />
-                    </div>
-
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
+<div class="add-page">
+    <div class="form">
+        <h2>Edit Employee</h2>
+        <form th:action="@{/employees/{id} (id=${employee.id})}" th:object="${employee}" method="post">
+            <input type="text" name="firstName" th:field="*{firstName}" placeholder="Enter Employee First Name"/>
+            <input type="text" name="lastName" th:field="*{lastName}" placeholder="Enter Employee Last Name"/>
+            <input type="text" name="emailId" th:field="*{emailId}" placeholder="Enter Employee Email"/>
+            <button>Submit</button>
+        </form>
     </div>
 </div>
 </body>

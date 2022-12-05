@@ -7,15 +7,15 @@ import java.util.List;
 public interface AppointmentService {
     List<Appointment> getAllAppointments();
 
-//    Appointment save(User user);
-
     Appointment saveAppointment(Appointment appointment);
 
-//    Appointment getAppointmentById(Long id);
-//
-//    Appointment updateAppointment(Long id, Appointment appointment);
-//
+    Appointment getAppointmentById(Long id);
+
+    List<Appointment> getAppointmentByUserId(Long id);
+
+    Appointment updateAppointment(Long id, Appointment appointment);
+
 //    Appointment updateAppointmentStatus(Long id, Appointment appointment);
-//
-//    void deleteAppointmentById(Long id);
+
+    void deleteAppointmentById(Long id);
 }

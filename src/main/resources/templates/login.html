@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
+    <!-- Custom stylesheet -->
     <link rel="stylesheet" href="../static/css/login.css" th:href="@{/css/login.css}">
 </head>
 <body>
@@ -14,10 +16,12 @@
             <div class="message error" th:if="${param.error}">
                 <span>Invalid username or password.</span>
             </div>
+
             <!-- logout message -->
             <div class="message logout" th:if="${param.logout}">
                 <span>You have been logged out.</span>
             </div>
+
             <input type="text" id="username" name="username" placeholder="username"/>
             <input type="password" id="password" name="password" placeholder="password"/>
             <button>login</button>

@@ -1,35 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Catalog</title>
 
     <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat&display=swap" rel="stylesheet">
 
-    <!-- Custom stlylesheet -->
+    <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="../static/css/catalog.css" th:href="@{/css/catalog.css}"/>
+    <link type="text/css" rel="stylesheet" href="../static/css/navigation.css" th:href="@{/css/navigation.css}"/>
 
     <!-- font-awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
 <body>
-
+<div th:insert="fragments/navigation :: ${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')} ? 'admin-navigation' : 'navigation'"></div>
 <div class="main-container">
     <div class="heading">
         <h1 class="heading__title">Our Services</h1>
     </div>
-
     <div class="cards">
         <div class="card" th:each="service: ${services}">
             <div class="card__icon"><i class="fa-sharp fa-solid fa-heart"></i></div>
-            <h2 class="card__title" th:text="${service.name}">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+            <h2 class="card__title" th:text="${service.name}">Name</h2>
             <p class="card__apply">
                 <a class="card__link" th:href="@{/appointments/new}">Book Now <i class="fas fa-arrow-right"></i></a>
             </p>
         </div>
     </div>
 </div>
-
 </body>
 </html>

@@ -8,27 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.mirea.study.beautysalon.model.Appointment;
-import ru.mirea.study.beautysalon.model.CustomUserDetails;
-import ru.mirea.study.beautysalon.model.Employee;
-import ru.mirea.study.beautysalon.model.SalonService;
+import ru.mirea.study.beautysalon.model.*;
 import ru.mirea.study.beautysalon.service.AppointmentService;
 import ru.mirea.study.beautysalon.service.EmployeeService;
 import ru.mirea.study.beautysalon.service.ServiceService;
-import ru.mirea.study.beautysalon.service.UserService;
 
 @Controller
 public class MainController {
     private final EmployeeService employeeService;
     private final ServiceService serviceService;
     private final AppointmentService appointmentService;
-    private final UserService userService;
 
-    public MainController(EmployeeService employeeService, ServiceService serviceService, AppointmentService appointmentService, UserService userService) {
+    public MainController(EmployeeService employeeService, ServiceService serviceService, AppointmentService appointmentService) {
         this.employeeService = employeeService;
         this.serviceService = serviceService;
         this.appointmentService = appointmentService;
-        this.userService = userService;
     }
 
     @GetMapping("/employees")
@@ -126,37 +120,22 @@ public class MainController {
     }
 
     @GetMapping("/catalog")
-    public String catalog(Model model){
+    public String catalog(Model model) {
         model.addAttribute("services", serviceService.getAllServices());
         return "catalog";
     }
 
     @GetMapping("/appointments")
     public String listAppointments(Model model) {
-        model.addAttribute("appointments", appointmentService.getAllAppointments());
+        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user != null && user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            model.addAttribute("appointments", appointmentService.getAllAppointments());
+        } else if (user != null && user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+            Long user_id = user.getId();
+            model.addAttribute("appointments", appointmentService.getAppointmentByUserId(user_id));
+        }
         return "appointments";
     }
-
-//    @PostMapping("/booking/new/{id}")
-//    public String saveAppointmentToList(@PathVariable("id") Long appointmentId,
-//                                        @AuthenticationPrincipal Authentication authentication) {
-//        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-//            return "You must login to book the service";
-//        }
-//
-//
-//        appointmentService.saveAppointment()
-//
-//    }
-
-//    @GetMapping("/booking")
-//    public String listBooking(Model model, @AuthenticationPrincipal Authentication authentication){
-//        String username = userService.getCurrentlyLoggedInUser(authentication);
-//        List<Appointment> appointments = appointmentService.findByUserName(username);
-//
-//        model.addAttribute("appointments", appointments);
-//        return "booking";
-//    }
 
     @GetMapping("/appointments/new")
     public String createAppointmentForm(Model model) {
@@ -177,49 +156,28 @@ public class MainController {
         return "redirect:/appointments";
     }
 
+    @GetMapping("/appointments/edit/{id}")
+    public String editAppointForm(@PathVariable Long id, Model model) {
+        model.addAttribute("appointment", appointmentService.getAppointmentById(id));
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        model.addAttribute("services", serviceService.getAllServices());
+        return "edit_appointment";
+    }
 
+    @PostMapping("/appointments/{id}")
+    public String updateAppointment(@PathVariable Long id, @ModelAttribute("appointment") Appointment appointment) {
+        Appointment existingAppointment = appointmentService.getAppointmentById(id);
+        existingAppointment.setAppointmentDate(appointment.getAppointmentDate());
+        existingAppointment.setAppointmentStartTime(appointment.getAppointmentStartTime());
+        existingAppointment.setEmployee(appointment.getEmployee());
+        existingAppointment.setService(appointment.getService());
+        appointmentService.updateAppointment(id, existingAppointment);
+        return "redirect:/appointments";
+    }
 
-//    @GetMapping("/appointments")
-//    public String listAppointments(Model model) {
-//        model.addAttribute("appointments", appointmentService.getAllAppointments());
-//        return "appointments";
-//    }
-//
-//    @GetMapping("/appointments/new")
-//    public String createAppointForm(Model model) {
-//        Appointment appointment = new Appointment();
-//        model.addAttribute("appointment", appointment);
-//        return "create_appointment";
-//    }
-//
-//    @PostMapping("/appointments")
-//    public String saveAppointment(@ModelAttribute("appointment") Appointment appointment) {
-//        appointmentService.saveAppointment(appointment);
-//        return "redirect:/appointments";
-//    }
-//
-//    @GetMapping("/appointments/edit/{id}")
-//    public String editAppointForm(@PathVariable Long id, Model model) {
-//        model.addAttribute("appointment", appointmentService.getAppointmentById(id));
-//        return "edit_appointment";
-//    }
-//
-//    @PostMapping("/appointments/{id}")
-//    public String updateAppointment(@PathVariable Long id, @ModelAttribute("appointment") Appointment appointment) {
-//        Appointment existingAppointment = appointmentService.getAppointmentById(id);
-//        existingAppointment.setId(id);
-//        existingAppointment.setAppointmentDate(appointment.getAppointmentDate());
-//        existingAppointment.setAppointmentStartTime(appointment.getAppointmentStartTime());
-//        existingAppointment.setEmployeeName(appointment.getEmployeeName());
-//        existingAppointment.setStatus(appointment.getStatus());
-//        existingAppointment.setServiceName(appointment.getServiceName());
-//        appointmentService.updateAppointment(id, existingAppointment);
-//        return "redirect:/appointments";
-//    }
-//
-//    @GetMapping("/appointments/{id}")
-//    public String deleteAppointment(@PathVariable Long id) {
-//        appointmentService.deleteAppointmentById(id);
-//        return "redirect:/appointments";
-//    }
+    @GetMapping("/appointments/{id}")
+    public String deleteAppointment(@PathVariable Long id) {
+        appointmentService.deleteAppointmentById(id);
+        return "redirect:/appointments";
+    }
 }

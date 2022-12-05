@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class AppointmentServiceImplementation implements AppointmentService {
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
     public AppointmentServiceImplementation(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
@@ -22,35 +22,38 @@ public class AppointmentServiceImplementation implements AppointmentService {
         return appointments;
     }
 
-//    @Override
-//    public Appointment save(User user) {
-//        Appointment appointment = appointmentRepository.findByUser(user);
-//        appointment.setUser(user);
-//        return appointmentRepository.save(appointment);
-//    }
-
     @Override
     public Appointment saveAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment);
     }
 
-//    @Override
-//    public Appointment getAppointmentById(Long id) {
-//        return appointmentRepository.findById(id).get();
-//    }
-//
-//    @Override
-//    public Appointment updateAppointment(Long id, Appointment appointment) {
-//        Appointment appointmentFromDb = appointmentRepository.findById(id).get();
-//        System.out.println(appointmentFromDb.toString());
-//        appointmentFromDb.setAppointmentDate(appointment.getAppointmentDate());
-//        appointmentFromDb.setAppointmentStartTime(appointment.getAppointmentStartTime());
-//        appointmentFromDb.setEmployeeName(appointment.getEmployeeName());
-//        appointmentFromDb.setServiceName(appointment.getServiceName());
-//        appointmentFromDb.setStatus(appointment.getStatus());
-//        return appointmentRepository.save(appointment);
-//    }
-//
+    @Override
+    public Appointment getAppointmentById(Long id) {
+        return appointmentRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Appointment> getAppointmentByUserId(Long id) {
+        return appointmentRepository.findByUserId(id);
+    }
+
+    @Override
+    public Appointment updateAppointment(Long id, Appointment appointment) {
+        Appointment appointmentFromDb = appointmentRepository.findById(id).get();
+        System.out.println(appointmentFromDb.toString());
+        appointmentFromDb.setAppointmentDate(appointment.getAppointmentDate());
+        appointmentFromDb.setAppointmentStartTime(appointment.getAppointmentStartTime());
+        appointmentFromDb.setEmployee(appointment.getEmployee());
+        appointmentFromDb.setService(appointment.getService());
+        appointmentFromDb.setUser(appointment.getUser());
+        return appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public void deleteAppointmentById(Long id) {
+        appointmentRepository.deleteById(id);
+    }
+
 //    @Override
 //    public Appointment updateAppointmentStatus(Long id, Appointment appointment) {
 //        Optional<Appointment> appointmentList = appointmentRepository.findById(id);
@@ -62,10 +65,5 @@ public class AppointmentServiceImplementation implements AppointmentService {
 //            return appointmentRepository.save(appointmentList.get());
 //        }
 //        return null;
-//    }
-//
-//    @Override
-//    public void deleteAppointmentById(Long id) {
-//        appointmentRepository.deleteById(id);
 //    }
 }

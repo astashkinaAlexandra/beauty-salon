@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Navigation</title>
+</head>
+<body>
+<!--Default Navigation-->
+<header th:fragment="navigation">
+    <section>
+        <div id="logo">Blameless</div>
+        <nav>
+            <a href=# th:href="@{/logout}">Logout</a>
+            <a href=# th:href="@{/catalog}">Services</a>
+            <a href=# th:href="@{/appointments/new}">Book online</a>
+            <a sec:authorize="isAuthenticated()" href=# th:href="@{/appointments}">Appointments</a>
+            <a href=# th:href="@{/}">Home</a>
+        </nav>
+    </section>
+</header>
+
+<!--Admin Navigation-->
+<header th:fragment="admin-navigation">
+    <section>
+        <div id="logo">Blameless</div>
+        <nav>
+            <a href=# th:href="@{/logout}">Logout</a>
+            <a href=# th:href="@{/appointments}">Appointments</a>
+            <a href=# th:href="@{/services}">Services</a>
+            <a href=# th:href="@{/employees}">Employees</a>
+            <a href=# th:href="@{/}">Home</a>
+        </nav>
+    </section>
+</header>
+
+</body>
+</html>

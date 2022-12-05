@@ -1,0 +1,49 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+header {
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+nav {
+    margin-right: 17%;
+}
+
+nav a {
+    float: right;
+    text-decoration: none;
+    color: #000000;
+    font-size: 18px;
+    padding: 25px 35px;
+    display: inline-block;
+    transition: all 0.5s ease 0s;
+}
+
+nav a:hover {
+    background-color: #F5F7FA;
+    color: #000000;
+    transition: all 0.5s ease 0s;
+}
+
+#logo {
+    font-size: 30px;
+    color: #000000;
+    font-family: 'Dancing Script', cursive;
+    font-weight: bold;
+    float: left;
+    padding: 20px;
+    margin-left: 17%;
+}
+
+@media only screen and (max-width: 1200px) {
+    #logo {
+        padding: 25px 0px;
+    }
+
+    nav a {
+        padding: 25px 20px;
+    }
+}

@@ -36,12 +36,12 @@
     margin-bottom: 0px;
 }
 
-.booking-form>form .row.no-margin {
+.booking-form > form .row.no-margin {
     margin-right: 0px;
     margin-left: 0px;
 }
 
-.booking-form>form .row.no-margin [class*="col-"] {
+.booking-form > form .row.no-margin [class*="col-"] {
     padding-right: 0px;
     padding-left: 0px;
 }
@@ -62,7 +62,7 @@
     transition: 0.2s all;
 }
 
-.booking-form [class*="col-"]+[class*="col-"] .form-group .form-control {
+.booking-form [class*="col-"] + [class*="col-"] .form-group .form-control {
     border-left: 0px;
 }
 
@@ -84,7 +84,8 @@
     box-shadow: none;
 }
 
-.booking-form input[type="date"].form-control:invalid {
+.booking-form input[type="date"].form-control:invalid,
+.booking-form input[type="time"].form-control:invalid {
     color: #dddee9;
 }
 
@@ -102,7 +103,7 @@
     color: #0e2753;
 }
 
-.booking-form select.form-control+.select-arrow {
+.booking-form select.form-control + .select-arrow {
     position: absolute;
     right: 0px;
     bottom: 4px;
@@ -115,7 +116,7 @@
     font-size: 20px;
 }
 
-.booking-form select.form-control+.select-arrow:after {
+.booking-form select.form-control + .select-arrow:after {
     content: '\279C';
     display: block;
     -webkit-transform: rotate(90deg);
@@ -146,7 +147,7 @@
 }
 
 @media only screen and (max-width: 767px) {
-    .booking-form [class*="col-"]+[class*="col-"] .form-group .form-control {
+    .booking-form [class*="col-"] + [class*="col-"] .form-group .form-control {
         border-left: 1px solid #dddee9;
     }
 }

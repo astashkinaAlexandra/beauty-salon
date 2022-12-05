@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Booking Form</title>
 
     <!-- Google font -->
@@ -25,11 +23,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
-    <!-- Custom stlylesheet -->
+    <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="../static/css/booking.css" th:href="@{/css/booking.css}"/>
-
 </head>
-
 <body>
 <div id="booking" class="section">
     <div class="section-center">
@@ -38,26 +34,23 @@
                 <div class="heading">
                     <h1 class="heading__title">Book Now</h1>
                 </div>
-
-
                 <div class="booking-form">
                     <form th:action="@{/appointments}" th:object="${appointment}" method="post">
 
-
+                        <!--todo -->
                         <!-- понять как передать id user'а -->
                         <input class="form-control" type="hidden" name="user" th:value="${user.id}">
-
 
 
                         <div class="form-group">
                             <span class="form-label">Date</span>
                             <input class="date form-control" type="date" name="appointmentDate"
-                                   th:field="*{appointmentDate}" placeholder="Enter Appointment Date" required>
+                                   th:field="*{appointmentDate}" required>
                         </div>
                         <div class="form-group">
                             <span class="form-label">Time</span>
-                            <input class="datetime form-control" type="text" name="appointmentStartTime"
-                                   th:field="*{appointmentStartTime}" placeholder="Enter Appointment Time" required>
+                            <input class="datetime form-control" type="time" name="appointmentStartTime"
+                                   th:field="*{appointmentStartTime}" required>
                         </div>
                         <div class="form-group">
                             <span class="form-label">Master name</span>
@@ -84,16 +77,10 @@
         </div>
     </div>
 </div>
-<!--<script type="text/javascript">-->
-<!--    $(".date").datepicker({-->
-<!--        format: "yyyy-mm-dd",-->
-<!--    });-->
-<!--</script>-->
 <script>
     $('.datetime').datetimepicker({
         format: 'hh:mm:ss'
     });
 </script>
 </body>
-
 </html>
